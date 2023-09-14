@@ -7,29 +7,19 @@ const Node = (data, left = null, right = null) => {
 
 const Tree = (array) => {
 
-    let root = buildTree(array)
+    let root = buildTree(mergeSort(array))
 
 
     const remove = (value, currentNode = root, previousNode) => {
-        console.log(currentNode)
-        console.log("-> currentNode.data: " + currentNode.data)
-        console.log("-> value: " + value)
-
+     //   console.log(currentNode)
         // checks current node with sought after value
         if (currentNode.data === value) {
-            // console.log("matched value: " + value)
-            // console.log(currentNode.data, currentNode.left, currentNode.right)
-            // console.log(currentNode.left === null)
 
             // LEAF NODE
             if ( currentNode.data === value && currentNode.left === null && currentNode.right === null ) {
-                
-                console.log("leaf")
-                console.log(currentNode.data)
-                console.log(previousNode.data)
 
                 if ( currentNode.data < previousNode.data ) {
-                        previousNode.left = null
+                    previousNode.left = null
                 } else previousNode.right = null
                 
                 return 
@@ -37,7 +27,6 @@ const Tree = (array) => {
 
             // NODE WITH ONE CHILD
             if ( currentNode.data === value && currentNode.right === null ) {
-                console.log("left remove test")
 
                 if ( currentNode.data > previousNode.data ) {
                     previousNode.right = currentNode.left
@@ -45,7 +34,6 @@ const Tree = (array) => {
             }
 
             if ( currentNode.data === value && currentNode.left === null ) {
-                console.log("right remove test")
 
                 if ( currentNode.data > previousNode.data ) {
                     previousNode.right = currentNode.left
@@ -53,13 +41,69 @@ const Tree = (array) => {
             }
 
             // NODE WITH TWO CHILDREN
+            if ( currentNode.data === value && currentNode.left !== null && currentNode.right !== null ) {
+                console.log("two children")
+                let leftNode = currentNode.right.left
+                let previousNodeTwoChildren = previousNode
+                console.log(previousNode)
+            
+                if ( leftNode === null && currentNode.right.right === null ) {  // right node has 0 children
+                    console.log("1")
+                    currentNode.data = currentNode.right.data
+                    currentNode.right = null
+                    return
+                }
 
-           
+                if ( leftNode === null && currentNode.right.right !== null ) { // right node has one child on right
+                    console.log("2")
+                    currentNode.data = currentNode.right.data
+                    currentNode.right = currentNode.right.right
+                    return
+                }
 
+                if ( leftNode.left === null ) { // right node has only one left child
+                    console.log("3") 
+                    currentNode.data = leftNode.data
+                    currentNode.right.left = null
+                    return
+                }
+
+                while ( leftNode !== null ) {
+
+                    previousNodeTwoChildren = leftNode
+                    leftNode = leftNode.left
+                    
+                    if ( leftNode === null || leftNode.left === null ) {
+                        currentNode.data = leftNode.data
+                        previousNodeTwoChildren.left = null
+                        return
+                    } 
+                }
+
+                // if ( leftNode.left !== null ) {
+                    
+                //     while ( leftNode !== null ) {
+
+                //         previousNodeTwoChildren = leftNode
+                //         leftNode = leftNode.left
+                    
+                //         if ( leftNode === null || leftNode.left === null ) {
+                //             currentNode.data = leftNode.data
+                //             previousNodeTwoChildren.left = null
+                //             return
+                //         } 
+                //     } 
+                // // in case right node has only one left child
+                // } else {
+                //     currentNode.data = leftNode.data
+                //     currentNode.right.left = null
+                //     return
+                // }
+                return
+            };
             return 
         };
 
-        // console.log("post-base-case")
         if ( value < currentNode.data ) {
             previousNode = currentNode
             currentNode = currentNode.left
@@ -69,7 +113,6 @@ const Tree = (array) => {
             currentNode = currentNode.right
             return remove(value, currentNode, previousNode)
         }
-
     };
 
 
@@ -78,35 +121,23 @@ const Tree = (array) => {
         if ( currentNode.data === value ) {
             return "value already exists"
         }
-    
-        // console.log(value)
-        // console.log(currentNode.data)
-        // console.log(currentNode.left)
-       
+
         if ( value < currentNode.data && currentNode.left === null ) {
-            // console.log(currentNode)
-            currentNode.left = Node(value)
-            
-            console.log(currentNode)
-            return 
+            return currentNode.left = Node(value)
         }
         
         if ( value > currentNode.data && currentNode.right === null ) {
-            // console.log(currentNode)
-            currentNode.right = Node(value)
-            console.log(currentNode.right)
-            return 
+            return currentNode.right = Node(value)
         }
-
-        // console.log(currentNode)
 
         if ( value < currentNode.data ) {
             currentNode = currentNode.left
-            // console.log(currentNode)
+             console.log(currentNode)
             return insert(value, currentNode)
         } else {
-            // console.log(currentNode)
+             
             currentNode = currentNode.right
+            console.log(currentNode)
             return insert(value, currentNode)
         }
     }
@@ -127,11 +158,10 @@ function buildTree(array) {
     let right = copy.slice(mid + 1)
 
     if ( array[mid] === undefined && left.length === 0 && right.length === 0 ) {
-        return null // Node(array[mid], left[0], right[0]) 
+        return null
     }
 
     if ( left.length === 0 && right.length === 0 ) {
-        console.log(array[mid])
         return Node(array[mid], left[0], right[0]) 
     }
 
@@ -141,6 +171,46 @@ function buildTree(array) {
 };
 
 
+function mergeSort(arr) {
+	
+	if (arr.length < 2) {
+		return arr
+	} else {
+
+		function sort(left, right, newArr) {
+			
+			let integerCount = left.length + right.length
+
+			for ( let i = 0 ; i < integerCount ; i++ ) {
+
+				if (left[0] < right[0]) {
+					newArr.push(left[0])
+					left.splice(0,1)
+					
+					if (left.length === 0) {
+						newArr.push(...right)
+						right = []
+						break	
+				} 
+
+				} else {
+					
+					newArr.push(right[0])
+					right.splice(0, 1)
+					
+					if (right.length === 0) {
+						newArr.push(...left)
+						left = []
+						break
+					}
+				}
+			}
+		return newArr
+		}
+
+	return sort( mergeSort(arr.splice(0, Math.round(arr.length / 2))), mergeSort(arr), newArr = [] )
+	}
+}	
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
     if (node === null) {
@@ -155,9 +225,17 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
     }
 };
 
-const tree = Tree([1,2,4,5,7,9])    //  1,2,3,4,5,6,7,8
-tree.insert(8)
-tree.insert(6)
+
+const tree = Tree([26, 49, 93, 46, 99, 37, 67, 3, 100, 30, 75, 59, 47, 72, 5, 71, 90, 54, 13, 29, 22])
+    tree.insert(50)
+    tree.insert(51)
+    tree.insert(52)
+    tree.insert(53)
+
+
+ 48, 84, 23, 40, 15, 32, 36, 57, 42, 58, 6, 24, 35, 96, 2, 50, 53, 27, 76, 85, 20, 55, 98, 11, 43, 94, 41, 12, 87
 
 prettyPrint(tree.root)
 console.log(tree.root)
+
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18

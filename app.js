@@ -10,8 +10,53 @@ const Tree = (array) => {
     let root = buildTree(mergeSort(array))
 
 
+    const find = (value, current = root) => {
+
+        console.log(current)
+
+        if ( value === current.data ) {
+           return current 
+        }
+
+        if ( value < current.data ) {
+            current = current.left
+            return find(value, current)
+        } else {
+            current = current.right
+            return find(value, current)
+        }
+    };
+
+    const levelOrder = (cb) => { 
+
+        let queue = [root]
+
+        while ( queue.length !== 0 ) {
+        
+            let current = queue[0]
+            console.log(current) 
+           
+            if (current.left !== null) {
+                queue.push(current.left)
+            }
+
+            if (current.right !== null) {
+                queue.push(current.right)
+            }
+
+            queue.shift()
+           
+        }
+        
+        //   3, 26, 30, 37, 46, 49, 67, 93, 99, 100
+
+        // traverse tree, supply nodes as cb(node)
+        // no function provided return array containing all node values
+    }
+
+
     const remove = (value, currentNode = root, previousNode) => {
-     //   console.log(currentNode)
+        //   console.log(currentNode)
         // checks current node with sought after value
         if (currentNode.data === value) {
 
@@ -142,7 +187,7 @@ const Tree = (array) => {
         }
     }
 
-    return { root, insert, remove }
+    return { root, insert, remove, find, levelOrder }
 };
 
 
@@ -226,14 +271,15 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 };
 
 
-const tree = Tree([26, 49, 93, 46, 99, 37, 67, 3, 100, 30, 75, 59, 47, 72, 5, 71, 90, 54, 13, 29, 22])
-    tree.insert(50)
-    tree.insert(51)
-    tree.insert(52)
-    tree.insert(53)
+const tree = Tree([26, 49, 93, 46, 99, 37, 67, 3, 100, 30])
 
+    // tree.insert(50)
+    // tree.insert(51)
+    // tree.insert(52)
+    // tree.insert(53)
 
- 48, 84, 23, 40, 15, 32, 36, 57, 42, 58, 6, 24, 35, 96, 2, 50, 53, 27, 76, 85, 20, 55, 98, 11, 43, 94, 41, 12, 87
+ 75, 59, 47, 72, 5, 71, 90, 54, 13, 29, 22, 48, 84, 23, 40, 15, 32
+ 36, 57, 42, 58, 6, 24, 35, 96, 2, 50, 53, 27, 76, 85, 20, 55, 98, 11, 43, 94, 41, 12, 87
 
 prettyPrint(tree.root)
 console.log(tree.root)

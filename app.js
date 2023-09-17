@@ -4,10 +4,44 @@ const Node = (data, left = null, right = null) => {
     return { data, left, right }
 };
 
+function test(a) {
+    console.log(a)
+}
 
 const Tree = (array) => {
 
     let root = buildTree(mergeSort(array))
+
+    // root - left - right
+    const preorder = (cb, current = root, array = []) => {  
+        
+        if (current) {
+
+            if ( current === null ) return
+
+            if (cb) {
+                cb(current.data)
+            } else {
+                array.push(current.data)
+            }
+
+            preorder(cb, current.left, array)
+            preorder(cb, current.right, array)
+        }
+
+        if (!cb) return array
+    };
+
+
+    const inorder = () => {
+
+        // left - root - right 
+    };
+
+    const postorder = () => {
+
+        // left - right - root
+    };
 
 
     const find = (value, current = root) => {
@@ -30,29 +64,37 @@ const Tree = (array) => {
     const levelOrder = (cb) => { 
 
         let queue = [root]
+        let store = []
 
-        while ( queue.length !== 0 ) {
-        
+        while ( queue.length !== 0 ) {  
+            
             let current = queue[0]
-            console.log(current) 
+            store.push(current.data)
            
             if (current.left !== null) {
                 queue.push(current.left)
             }
-
+        
             if (current.right !== null) {
                 queue.push(current.right)
             }
-
+        
+            if (cb) {
+                cb(queue[0]) 
+            }
+        
             queue.shift()
-           
         }
+        
+        if ( queue.length === 0 ) {
+            return store
+        }
+    };
         
         //   3, 26, 30, 37, 46, 49, 67, 93, 99, 100
 
         // traverse tree, supply nodes as cb(node)
         // no function provided return array containing all node values
-    }
 
 
     const remove = (value, currentNode = root, previousNode) => {
@@ -185,9 +227,9 @@ const Tree = (array) => {
             console.log(currentNode)
             return insert(value, currentNode)
         }
-    }
+    };
 
-    return { root, insert, remove, find, levelOrder }
+    return { root, insert, remove, find, levelOrder, preorder }
 };
 
 
@@ -255,7 +297,7 @@ function mergeSort(arr) {
 
 	return sort( mergeSort(arr.splice(0, Math.round(arr.length / 2))), mergeSort(arr), newArr = [] )
 	}
-}	
+};
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
     if (node === null) {
@@ -283,5 +325,3 @@ const tree = Tree([26, 49, 93, 46, 99, 37, 67, 3, 100, 30])
 
 prettyPrint(tree.root)
 console.log(tree.root)
-
-1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18

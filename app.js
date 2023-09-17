@@ -32,15 +32,47 @@ const Tree = (array) => {
         if (!cb) return array
     };
 
+    // left - root - right
+    const inorder = (cb, current = root, array = []) => {  
 
-    const inorder = () => {
+        if (current) {
+  
+            if ( current === null ) return
+        
+            inorder(cb, current.left, array)
+            
+            if (cb) {
+                cb(current.data)
+            } else {
+                array.push(current.data)
+            }
 
-        // left - root - right 
+            inorder(cb, current.right, array)
+            
+        }
+
+        if (!cb) return array
     };
 
-    const postorder = () => {
+    // left - right - root
+    const postorder = (cb, current = root, array = []) => {  
 
-        // left - right - root
+        if (current) {
+  
+            if ( current === null ) return
+        
+            inorder(cb, current.left, array)
+            inorder(cb, current.right, array)
+            
+            if (cb) {
+                cb(current.data)
+            } else {
+                array.push(current.data)
+            } 
+        }
+
+        if (!cb) return array
+        
     };
 
 
@@ -90,12 +122,6 @@ const Tree = (array) => {
             return store
         }
     };
-        
-        //   3, 26, 30, 37, 46, 49, 67, 93, 99, 100
-
-        // traverse tree, supply nodes as cb(node)
-        // no function provided return array containing all node values
-
 
     const remove = (value, currentNode = root, previousNode) => {
         //   console.log(currentNode)
@@ -202,7 +228,6 @@ const Tree = (array) => {
         }
     };
 
-
     const insert = (value, currentNode = root) => {
 
         if ( currentNode.data === value ) {
@@ -229,7 +254,7 @@ const Tree = (array) => {
         }
     };
 
-    return { root, insert, remove, find, levelOrder, preorder }
+    return { root, insert, remove, find, levelOrder, preorder, inorder, postorder }
 };
 
 
@@ -315,13 +340,9 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 
 const tree = Tree([26, 49, 93, 46, 99, 37, 67, 3, 100, 30])
 
-    // tree.insert(50)
-    // tree.insert(51)
-    // tree.insert(52)
-    // tree.insert(53)
 
- 75, 59, 47, 72, 5, 71, 90, 54, 13, 29, 22, 48, 84, 23, 40, 15, 32
- 36, 57, 42, 58, 6, 24, 35, 96, 2, 50, 53, 27, 76, 85, 20, 55, 98, 11, 43, 94, 41, 12, 87
+75, 59, 47, 72, 5, 71, 90, 54, 13, 29, 22, 48, 84, 23, 40, 15, 32
+36, 57, 42, 58, 6, 24, 35, 96, 2, 50, 53, 27, 76, 85, 20, 55, 98, 11, 43, 94, 41, 12, 87
 
 prettyPrint(tree.root)
 console.log(tree.root)

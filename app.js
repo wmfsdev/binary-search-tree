@@ -18,11 +18,11 @@ const Tree = (array) => {
         if (current) {
 
             if ( current === null ) return
+            
+            array.push(current.data)
 
             if (cb) {
-                cb(current.data)
-            } else {
-                array.push(current.data)
+                cb(array[array.length - 1])
             }
 
             preorder(cb, current.left, array)
@@ -40,11 +40,11 @@ const Tree = (array) => {
             if ( current === null ) return
         
             inorder(cb, current.left, array)
-            
+
+            array.push(current.data)
+
             if (cb) {
-                cb(current.data)
-            } else {
-                array.push(current.data)
+                cb(array[array.length - 1])
             }
 
             inorder(cb, current.right, array)
@@ -61,17 +61,17 @@ const Tree = (array) => {
   
             if ( current === null ) return
         
-            inorder(cb, current.left, array)
-            inorder(cb, current.right, array)
-            
+            postorder(cb, current.left, array)
+            postorder(cb, current.right, array)
+
+            array.push(current.data)
+
             if (cb) {
-                cb(current.data)
-            } else {
-                array.push(current.data)
-            } 
+                cb(array[array.length - 1])
+            }
         }
 
-        if (!cb) return array
+       if (!cb) return array
         
     };
 

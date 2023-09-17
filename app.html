@@ -10,25 +10,3 @@
 </body>
 <script src="app.js"></script>
 </html>
-
-
-while ( queue.length !== 0 ) {
-        
-    let current = queue[0]
-//    console.log(current) 
-   
-    if (current.left !== null) {
-        queue.push(current.left)
-    }
-
-    if (current.right !== null) {
-        queue.push(current.right)
-    }
-
-    if (cb) {
-        cb(queue[0]) 
-    }
-
-    queue.shift()
-   
-}

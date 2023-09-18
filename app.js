@@ -4,11 +4,16 @@ const Node = (data, left = null, right = null) => {
     return { data, left, right }
 };
 
-function test(a) {
+
+const test = (a) => {
     console.log(a)
 }
 
+
+
+
 const Tree = (array) => {
+
 
     let root = buildTree(mergeSort(array))
 
@@ -19,10 +24,10 @@ const Tree = (array) => {
 
             if ( current === null ) return
             
-            array.push(current.data)
-
             if (cb) {
-                cb(array[array.length - 1])
+                cb(current)
+            } else {
+                array.push(current.data)
             }
 
             preorder(cb, current.left, array)
@@ -41,10 +46,10 @@ const Tree = (array) => {
         
             inorder(cb, current.left, array)
 
-            array.push(current.data)
-
             if (cb) {
-                cb(array[array.length - 1])
+                cb(current)
+            } else {
+                array.push(current.data)
             }
 
             inorder(cb, current.right, array)
@@ -64,15 +69,29 @@ const Tree = (array) => {
             postorder(cb, current.left, array)
             postorder(cb, current.right, array)
 
-            array.push(current.data)
-
             if (cb) {
-                cb(array[array.length - 1])
+                cb(current)
+            } else {
+                array.push(current.data)
             }
         }
 
        if (!cb) return array
         
+    };
+
+    const height = (node = root) => {
+       
+        if (node === null) return 0
+      
+        const left = height(node.left)
+        const right = height(node.right)
+     
+        if (left > right) {
+            return left + 1;
+        } else {
+            return right + 1;
+        }
     };
 
 
@@ -254,7 +273,7 @@ const Tree = (array) => {
         }
     };
 
-    return { root, insert, remove, find, levelOrder, preorder, inorder, postorder }
+    return { root, insert, remove, find, levelOrder, preorder, inorder, postorder, height }
 };
 
 

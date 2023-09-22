@@ -4,18 +4,61 @@ const Node = (data, left = null, right = null) => {
     return { data, left, right }
 };
 
-
 const test = (a) => {
-    console.log(a)
-}
-
-
-
+        console.log(a)
+        return a
+    }
 
 const Tree = (array) => {
 
-
     let root = buildTree(mergeSort(array))
+
+    const isBalanced = (node = root) => {
+
+        if (node === null) return 0
+
+        const left = height(node.left)
+        const right = height(node.right)
+
+        if ( (left - right) > 1 || (right - left) > 1 ) {
+            return false
+        } else return true
+    
+        // if (left > right) {
+        //     return left + 1;
+        // } else {
+        //     return right + 1;
+        // } from height()       
+    };
+
+    const balanceHeight = (current = root) => {
+     
+        if(current == null) return true
+            
+        let lh = height(current.left)
+        let rh = height(current.right)
+         
+        if (Math.abs(lh - rh) <= 1 && balanceHeight(current.left) == true && balanceHeight( current.right) == true) return true
+          
+        return false
+    };
+    
+    const trial = (currentNode = root) => {
+        debugger
+        if (currentNode === null)  return -1;
+
+        let leftSubtreeHeight = trial (currentNode.left);
+        if (leftSubtreeHeight === false) return false;
+
+        let rightSubtreeHeight = trial (currentNode.right);
+        if (rightSubtreeHeight === false) return false;
+        
+        if (Math.abs(leftSubtreeHeight - rightSubtreeHeight) > 1) return false;
+        console.log(leftSubtreeHeight, rightSubtreeHeight)
+        console.log(Math.max(leftSubtreeHeight, rightSubtreeHeight) + 1)
+        return (Math.max(leftSubtreeHeight, rightSubtreeHeight) + 1);
+    };
+
 
     // root - left - right
     const preorder = (cb, current = root, array = []) => {  
@@ -25,7 +68,8 @@ const Tree = (array) => {
             if ( current === null ) return
             
             if (cb) {
-                cb(current)
+                console.log(current)
+              cb(current)
             } else {
                 array.push(current.data)
             }
@@ -38,25 +82,28 @@ const Tree = (array) => {
     };
 
     // left - root - right
-    const inorder = (cb, current = root, array = []) => {  
+    const inorder = (cb, current = root, array = [], cbArray = []) => {  
 
         if (current) {
   
             if ( current === null ) return
         
-            inorder(cb, current.left, array)
+            inorder(cb, current.left, array, cbArray)
 
             if (cb) {
-                cb(current)
+
+                cbArray.push(cb(current))
+    
             } else {
                 array.push(current.data)
             }
 
-            inorder(cb, current.right, array)
+            inorder(cb, current.right, array, cbArray)
             
         }
 
         if (!cb) return array
+        else return cbArray
     };
 
     // left - right - root
@@ -80,13 +127,14 @@ const Tree = (array) => {
         
     };
 
-    const height = (node = root) => {
-       
-        if (node === null) return 0
+    const height = (node = root) => { 
+    // Height is defined as the number of edges in longest path from a given node to a leaf node.
+
+        if (node === null) return -1
       
         const left = height(node.left)
         const right = height(node.right)
-     
+    
         if (left > right) {
             return left + 1;
         } else {
@@ -94,10 +142,23 @@ const Tree = (array) => {
         }
     };
 
+    const depth = (node = root, current = root, d = 0) => { 
+    // Depth is defined as the number of edges in path from a given node to the tree’s root node.
+
+        if (node === null) return 0
+
+        if (node.data === current.data) {
+            return d
+        }
+
+        if (node.data < current.data) {
+            return depth(node, current.left, d + 1)
+        } else {
+            return depth(node, current.right, d + 1)
+        }
+    };
 
     const find = (value, current = root) => {
-
-        console.log(current)
 
         if ( value === current.data ) {
            return current 
@@ -129,9 +190,9 @@ const Tree = (array) => {
             if (current.right !== null) {
                 queue.push(current.right)
             }
-        
+
             if (cb) {
-                cb(queue[0]) 
+                console.log(queue[0].data)
             }
         
             queue.shift()
@@ -263,17 +324,15 @@ const Tree = (array) => {
 
         if ( value < currentNode.data ) {
             currentNode = currentNode.left
-             console.log(currentNode)
             return insert(value, currentNode)
         } else {
              
             currentNode = currentNode.right
-            console.log(currentNode)
             return insert(value, currentNode)
         }
     };
 
-    return { root, insert, remove, find, levelOrder, preorder, inorder, postorder, height }
+    return { root, insert, remove, find, levelOrder, preorder, inorder, postorder, height, depth, isBalanced, balanceHeight, trial }
 };
 
 
@@ -357,11 +416,26 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 };
 
 
-const tree = Tree([26, 49, 93, 46, 99, 37, 67, 3, 100, 30])
-
-
-75, 59, 47, 72, 5, 71, 90, 54, 13, 29, 22, 48, 84, 23, 40, 15, 32
+const tree = Tree([26, 49, 93, 20])
+//, , 67, 3, 100, 30
+ 59, 47, 72, 5, 71, 90, 54, 13, 29, 22, 48, 84, 23, 40, 15, 32
 36, 57, 42, 58, 6, 24, 35, 96, 2, 50, 53, 27, 76, 85, 20, 55, 98, 11, 43, 94, 41, 12, 87
+
+
+tree.insert(27)
+// tree.insert(29)
+// tree.insert(31)
+// tree.insert(30)
+// tree.insert(32)
+
+// tree.insert(45)
+// tree.insert(44)
+
+ tree.insert(100)
+ tree.insert(101)
+ tree.insert(103)
+  tree.insert(104)
+
 
 prettyPrint(tree.root)
 console.log(tree.root)

@@ -1,32 +1,31 @@
-#!/usr/bin/node
 
 const Node = (data, left = null, right = null) => {
     return { data, left, right }
 };
 
-// const test = (a) => {
+// const log = (a) => {
 //         console.log(a)
 //         return a
-//     }
+// }
 
-   // let tree = Tree([26, 49, 93, 20])
-   // let tree = Tree([26, 49, 93, 20])
+// let tree = Tree([26, 49, 93, 20])
+  
 
 const Tree = (array) => {
-    
-     let root = buildTree(mergeSort(array))
 
+    let root = buildTree(removeSortedDupes(array.sort(compareFn)))
 
     const rebalance = () => {
 
         let array = levelOrder()
-        
-        root = buildTree(mergeSort(array))
+        console.log(array)
+        root = array.sort(compareFn)                         // root = buildTree(mergeSort(array))
+        console.log(root)
+        // prettyPrint(getRoot)
+    };
 
-    }
+    const getRoot = () => root 
 
-
-    
     const isBalanced = (node = root) => {
 
         if (node === null) return 0
@@ -345,7 +344,7 @@ const Tree = (array) => {
         }
     };
 
-    return { root, insert, remove, find, levelOrder, preorder, inorder, postorder, height, depth, isBalanced, balanceHeight, trial, rebalance }
+    return { root, insert, remove, find, levelOrder, preorder, inorder, postorder, height, depth, isBalanced, balanceHeight, trial, rebalance, getRoot }
 };
 
 
@@ -372,6 +371,29 @@ function buildTree(array) {
     root.right = buildTree(right)
     return root
 };
+
+
+const compareFn = (a, b) => {
+    console.log(a, b)
+    return a - b
+};    
+
+
+const removeSortedDupes = (array, a = array[0], b = array[1], count = 0) => {
+    
+    if ( array.length === count ) {
+        return array
+    }
+    
+    a = array[0 + count]
+    b = array[1 + count]
+
+    if ( a === b) {
+        array.splice(count, 1)
+    } else count++
+
+    return removeDupes(array, a, b, count)
+}; 
 
 
 function mergeSort(arr) {

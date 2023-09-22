@@ -4,15 +4,29 @@ const Node = (data, left = null, right = null) => {
     return { data, left, right }
 };
 
-const test = (a) => {
-        console.log(a)
-        return a
-    }
+// const test = (a) => {
+//         console.log(a)
+//         return a
+//     }
+
+   // let tree = Tree([26, 49, 93, 20])
+   // let tree = Tree([26, 49, 93, 20])
 
 const Tree = (array) => {
+    
+     let root = buildTree(mergeSort(array))
 
-    let root = buildTree(mergeSort(array))
 
+    const rebalance = () => {
+
+        let array = levelOrder()
+        
+        root = buildTree(mergeSort(array))
+
+    }
+
+
+    
     const isBalanced = (node = root) => {
 
         if (node === null) return 0
@@ -58,7 +72,6 @@ const Tree = (array) => {
         console.log(Math.max(leftSubtreeHeight, rightSubtreeHeight) + 1)
         return (Math.max(leftSubtreeHeight, rightSubtreeHeight) + 1);
     };
-
 
     // root - left - right
     const preorder = (cb, current = root, array = []) => {  
@@ -332,7 +345,7 @@ const Tree = (array) => {
         }
     };
 
-    return { root, insert, remove, find, levelOrder, preorder, inorder, postorder, height, depth, isBalanced, balanceHeight, trial }
+    return { root, insert, remove, find, levelOrder, preorder, inorder, postorder, height, depth, isBalanced, balanceHeight, trial, rebalance }
 };
 
 
@@ -416,26 +429,26 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 };
 
 
-const tree = Tree([26, 49, 93, 20])
+
 //, , 67, 3, 100, 30
- 59, 47, 72, 5, 71, 90, 54, 13, 29, 22, 48, 84, 23, 40, 15, 32
-36, 57, 42, 58, 6, 24, 35, 96, 2, 50, 53, 27, 76, 85, 20, 55, 98, 11, 43, 94, 41, 12, 87
+//  59, 47, 72, 5, 71, 90, 54, 13, 29, 22, 48, 84, 23, 40, 15, 32
+// 36, 57, 42, 58, 6, 24, 35, 96, 2, 50, 53, 27, 76, 85, 20, 55, 98, 11, 43, 94, 41, 12, 87
 
 
-tree.insert(27)
-// tree.insert(29)
-// tree.insert(31)
+// tree.insert(27)
+// // tree.insert(29)
+// // tree.insert(31)
 // tree.insert(30)
 // tree.insert(32)
 
 // tree.insert(45)
 // tree.insert(44)
 
- tree.insert(100)
- tree.insert(101)
- tree.insert(103)
-  tree.insert(104)
+//  tree.insert(100)
+//  tree.insert(101)
+//  tree.insert(103)
+//   tree.insert(104)
 
 
-prettyPrint(tree.root)
-console.log(tree.root)
+// prettyPrint(tree.root)
+// console.log(tree.root)

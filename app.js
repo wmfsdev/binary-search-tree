@@ -3,13 +3,18 @@ const Node = (data, left = null, right = null) => {
     return { data, left, right }
 };
 
-// const log = (a) => {
-//         console.log(a)
-//         return a
-// }
 
-// let tree = Tree([26, 49, 93, 20])
-  
+function randomNumber(number = 25, max = 100) {
+
+    let array = []
+
+    for ( let i = 0 ; i <= number ; i++) {
+        array.push(Math.floor(Math.random() * max));
+    }
+
+    return array
+};
+
 
 const Tree = (array) => {
 
@@ -18,10 +23,8 @@ const Tree = (array) => {
     const rebalance = () => {
 
         let array = levelOrder()
-        console.log(array)
-        root = array.sort(compareFn)                         // root = buildTree(mergeSort(array))
-        console.log(root)
-        // prettyPrint(getRoot)
+        root = buildTree(array.sort(compareFn))
+
     };
 
     const getRoot = () => root 
@@ -348,6 +351,7 @@ const Tree = (array) => {
 };
 
 
+
 function buildTree(array) {
 
     let copy = array
@@ -374,7 +378,6 @@ function buildTree(array) {
 
 
 const compareFn = (a, b) => {
-    console.log(a, b)
     return a - b
 };    
 
@@ -392,7 +395,7 @@ const removeSortedDupes = (array, a = array[0], b = array[1], count = 0) => {
         array.splice(count, 1)
     } else count++
 
-    return removeDupes(array, a, b, count)
+    return removeSortedDupes(array, a, b, count)
 }; 
 
 
@@ -437,6 +440,7 @@ function mergeSort(arr) {
 	}
 };
 
+
 const prettyPrint = (node, prefix = "", isLeft = true) => {
     if (node === null) {
       return;
@@ -450,27 +454,24 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
     }
 };
 
+let tree = Tree(randomNumber())     // 1. Create a binary search tree from an array of random numbers < 100. You can create a function 
+                                    // that returns an array of random numbers every time you call it, if you wish.
+prettyPrint(tree.root)
 
-
-//, , 67, 3, 100, 30
-//  59, 47, 72, 5, 71, 90, 54, 13, 29, 22, 48, 84, 23, 40, 15, 32
-// 36, 57, 42, 58, 6, 24, 35, 96, 2, 50, 53, 27, 76, 85, 20, 55, 98, 11, 43, 94, 41, 12, 87
-
-
-// tree.insert(27)
-// // tree.insert(29)
-// // tree.insert(31)
-// tree.insert(30)
-// tree.insert(32)
-
-// tree.insert(45)
-// tree.insert(44)
-
-//  tree.insert(100)
-//  tree.insert(101)
-//  tree.insert(103)
-//   tree.insert(104)
-
-
-// prettyPrint(tree.root)
-// console.log(tree.root)
+console.log("isBalanced?", tree.isBalanced())      // 2. Confirm that the console.log(tree is balanced by calling isBalanced.
+console.log(tree.levelOrder())                     // 3. Print out all elements in level, pre, post, and in order.
+console.log(tree.preorder())
+console.log(tree.postorder())
+console.log(tree.inorder())
+tree.insert(150)                                // 4. Unbalance the tree by adding several numbers > 100.
+tree.insert(200)
+tree.insert(250)
+prettyPrint(tree.root)
+console.log("isBalanced?", tree.isBalanced())   // 5. Confirm that the console.log(tree is unbalanced by calling isBalanced.
+tree.rebalance() 
+console.log("rebalancing...")                   // 6. Balance the tree by calling rebalance.
+console.log("isBalanced?",tree.isBalanced())    // 7. Confirm that the tree is balanced by calling isBalanced.   
+console.log("levelOrder", tree.levelOrder())    // 8. Print out all elements in level, pre, post, and in order.
+console.log("preorder", tree.preorder())
+console.log("postorder", tree.postorder())
+console.log("inorder", tree.inorder())
